@@ -41,11 +41,11 @@
                         <!-- Authentication Links -->
                         @guest
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                <a class="nav-link" href="{{ route('admin.login') }}">{{ __('Login') }}</a>
                             </li>
                             @if (Route::has('register'))
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                    <a class="nav-link" href="{{ route('admin.register') }}">{{ __('Register') }}</a>
                                 </li>
                             @endif
                         @else
@@ -55,13 +55,13 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
+                                    <a class="dropdown-item" href="{{ route('admin.logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
                                     </a>
 
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                    <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
                                         @csrf
                                     </form>
                                 </div>
@@ -72,9 +72,37 @@
             </div>
         </nav>
 
-        <main class="py-4">
-            @yield('content')
-        </main>
+        <div class="container row">
+            <!-- left Sidevar -->
+            <div class="col-md-3">
+                <main class="py-4">
+                    <ul class="nav nav-pills flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">商品一覧(作成中)</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">商品登録(作成中)</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{-- route('category.index') --}}">カテゴリ管理</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">受注管理(作成中)</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">会員管理(作成中)</a>
+                        </li>
+                    </ul>
+                </main>
+            </div>
+
+            <!-- main contents -->
+            <div class="col-md-9">
+                <main class="py-4">
+                    @yield('content')
+                </main>
+            </div>
+        </div>
     </div>
 </body>
 </html>
