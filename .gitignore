@@ -10,3 +10,5 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
+/storage/debugbar/.gitignore
+/storage/debugbar/Xdfd81f961d127bde8037bf51cdb3c301.json
