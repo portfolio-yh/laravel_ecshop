@@ -17,8 +17,17 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+// 管理者未ログイン
+Route::group(['prefix' => 'admin', 'namespace' => 'Admin\Auth'], function() {
+    Route::get('login', 'LoginController@showLoginForm')->name('admin.login');
+    Route::post('login', 'LoginController@login')->name('admin.login');
+    Route::get('register', 'RegisterController@showRegisterForm')->name('admin.register');
+    Route::post('register', 'RegisterController@register')->name('admin.register');
+    Route::get('password/rest', 'ForgotPasswordController@showLinkRequestForm')->name('admin.password.request');
+});
+// 管理者ログイン済
+Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function(){
+    Route::post('logout', 'Admin\Auth\LoginController@logout')->name('admin.logout');
+    Route::get('/', 'Admin\HomeController@index')->name('admin.home');
+});
 
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');

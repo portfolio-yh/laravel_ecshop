@@ -46,6 +46,11 @@ return [
             'provider' => 'users',
             'hash' => false,
         ],
+
+        'admin' => [                //追加
+            'driver' => 'session',
+            'provider' => 't_admins',
+        ],
     ],
 
     /*
@@ -70,6 +75,12 @@ return [
             'driver' => 'eloquent',
             'model' => App\User::class,
         ],
+
+        't_admins' => [                     //追加
+            'driver' => 'eloquent',
+            'model' => App\Admin::class,
+        ],
+
 
         // 'users' => [
         //     'driver' => 'database',
@@ -98,6 +109,13 @@ return [
             'table' => 'password_resets',
             'expire' => 60,
         ],
+
+        'admins' => [                      //追加
+            'provider' => 't_admins',
+            'table' => 'password_resets',
+            'expire' => 60,
+        ],
+
     ],
 
 ];

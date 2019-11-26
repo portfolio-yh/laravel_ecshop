@@ -5,6 +5,11 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
+use Illuminate\Http\Request;                      //追加
+use Illuminate\Http\Response;                     //追加
+use Illuminate\Auth\AuthenticationException;      //追加
+
+
 class Handler extends ExceptionHandler
 {
     /**
@@ -48,4 +53,20 @@ class Handler extends ExceptionHandler
     {
         return parent::render($request, $exception);
     }
+
+
+    //オーバーライド
+    protected function unauthenticated($request, AuthenticationException $exception)
+    {
+        if($request->expectsJson()) {
+            return response()->json(['error' => 'Unauthenticated.'], 401);
+        }
+
+        if(in_array('admin', $exception->guards())){
+            return redirect()->guest('admin/login');
+        }
+
+        return redirect()->guest(route('login'));
+    }
+
 }
