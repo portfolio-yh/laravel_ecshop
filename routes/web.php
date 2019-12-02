@@ -26,8 +26,12 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin\Auth'], function() {
     Route::get('password/rest', 'ForgotPasswordController@showLinkRequestForm')->name('admin.password.request');
 });
 // 管理者ログイン済
-Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function(){
-    Route::post('logout', 'Admin\Auth\LoginController@logout')->name('admin.logout');
-    Route::get('/', 'Admin\HomeController@index')->name('admin.home');
+Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'auth:admin'], function(){
+    Route::get('/', 'HomeController@index')->name('admin.home');
+    Route::post('logout', 'Auth\LoginController@logout')->name('admin.logout');
+
+    Route::resource('member', 'MembersController');
+
+
 });
 
