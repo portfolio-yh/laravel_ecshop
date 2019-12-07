@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 <div class="card">
-    <div class="card-header">管理者登録テスト用</div>
+    <div class="card-header">一般登録テスト用</div>
     <div class="card-body">
         @if($errors->any())
                 <ul class="alert alert-danger" role="alert">
@@ -30,12 +30,12 @@
 
             <div class="row">
                 <div class="col-3">性別* @error('sex_id') <br><strong class="text-danger">{{ $message }}</strong> @enderror</div>
-                <label class="mr-1"><input id="sex_id" type="radio" name="sex_id" value="1" checked>男</label>
+                <label class="mr-1"><input id="sex_id" type="radio" name="sex_id" value="1">男</label>
                 <label class="mx-1"><input id="sex_id" type="radio" name="sex_id" value="2">女</label>
             </div><hr>
 
             <div class="row">
-                <div class="col-3">生年月日 @error('birthday_date.*') <br><strong class="text-danger">{{ $message }}</strong> @enderror</div>
+                <div class="col-3">生年月日* @error('birthday_date.*') <br><strong class="text-danger">{{ $message }}</strong> @enderror</div>
                 <div>
                     <span>年</span>
                     <select name="birthday_date[year]">
@@ -62,7 +62,7 @@
             </div><hr>
 
             <div class="row">
-                <label class="col-3" for="age">年齢 @error('age') <br><strong class="text-danger">{{ $message }}</strong> @enderror</label>
+                <label class="col-3" for="age">年齢* @error('age') <br><strong class="text-danger">{{ $message }}</strong> @enderror</label>
                 <input type="text"  id="age" name="age" value="{{ old('age') }}" placeholder="半角数字3文字以内" maxlength="3">
             </div><hr>
 
@@ -72,17 +72,17 @@
             </div><hr>
 
             <div class="row">
-                <div class="col-3">あなたの趣味 @error('checkbox') <br><strong class="text-danger">{{ $message }}</strong> @enderror </div>
+                <div class="col-3">あなたの趣味(任意) @error('hobby') <br><strong class="text-danger">{{ $message }}</strong> @enderror </div>
                 <div class="col-8">
-                    <label class="checkbox-inline mx-1"><input type="checkbox" id="hobby" name="hobby[]" value="0">特になし</label>
-                    <label class="checkbox-inline mx-1"><input type="checkbox" id="hobby" name="hobby[]" value="1" checked>勉強</label>
-                    <label class="checkbox-inline mx-1"><input type="checkbox" id="hobby" name="hobby[]" value="2" checked>読書</label>
-                    <label class="checkbox-inline mx-1"><input type="checkbox" id="hobby" name="hobby[]" value="3">スポーツ</label>
-                    <label class="checkbox-inline mx-1"><input type="checkbox" id="hobby" name="hobby[]" value="4">アニメ・ゲーム</label>
-                    <label class="checkbox-inline mx-1"><input type="checkbox" id="hobby" name="hobby[]" value="5">映画鑑賞</label>
-                    <label class="checkbox-inline mx-1"><input type="checkbox" id="hobby" name="hobby[]" value="6">旅行</label>
-                    <label class="checkbox-inline mx-1"><input type="checkbox" id="hobby" name="hobby[]" value="7">音楽</label>
-                    <label class="checkbox-inline mx-1"><input type="checkbox" id="hobby" name="hobby[]" value="8">料理</label>
+                    {{--                    参考(name属性の配列要素をoldで取得する方法) : https://www.yukiiworks.com/archives/264            --}}
+                    <label class="mx-1"><input type="checkbox" id="hobby" name="hobby[1]" value="1" {{  old('hobby.1') ? 'checked' : '' }}>勉強</label>
+                    <label class="mx-1"><input type="checkbox" id="hobby" name="hobby[2]" value="2" {{  old('hobby.2') ? 'checked' : '' }}>読書</label>
+                    <label class="mx-1"><input type="checkbox" id="hobby" name="hobby[3]" value="3" {{  old('hobby.3') ? 'checked' : '' }}>スポーツ</label>
+                    <label class="mx-1"><input type="checkbox" id="hobby" name="hobby[4]" value="4" {{  old('hobby.4') ? 'checked' : '' }}>アニメ・ゲーム</label>
+                    <label class="mx-1"><input type="checkbox" id="hobby" name="hobby[5]" value="5" {{  old('hobby.5') ? 'checked' : '' }}>映画鑑賞</label>
+                    <label class="mx-1"><input type="checkbox" id="hobby" name="hobby[6]" value="6" {{  old('hobby.6') ? 'checked' : '' }}>旅行</label>
+                    <label class="mx-1"><input type="checkbox" id="hobby" name="hobby[7]" value="7" {{  old('hobby.7') ? 'checked' : '' }}>音楽</label>
+                    <label class="mx-1"><input type="checkbox" id="hobby" name="hobby[8]" value="8" {{  old('hobby.8') ? 'checked' : '' }}>料理</label>
                 </div>
             </div><hr>
 
@@ -98,12 +98,12 @@
 
             <div class="row">
                 <label class="col-3" for="email">パスワード確認*</label>
-                <input id="password-confirm" type="password" class="" name="password_confirmation" autocomplete="new-password">
+                <input id="password2" type="password" class="" name="password2" autocomplete="new-password">
             </div><hr>
 
             <div class="row">
                 <label class="col-3" for="agreement">登録に同意する @error('agreement') <br><strong class="text-danger">{{ $message }}</strong> @enderror</label>
-                <input type="checkbox" name="agreement" id="agreement" value="1" checked>
+                <input type="checkbox" name="agreement" id="agreement" value="1">
             </div><hr>
 
             <button type="submit" class="col-3 mx-auto btn btn-block btn-primary">{{ __('Register') }}</button>
