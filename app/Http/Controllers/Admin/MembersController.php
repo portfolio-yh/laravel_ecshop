@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\Admin\MemberFormRequest;
 use App\Http\Controllers\Controller;
 
+
 class MembersController extends Controller
 {
 
@@ -24,7 +25,11 @@ class MembersController extends Controller
         dump($request->all()); //確認用
         //dump($_POST);
 
-        return view('admin.member.create');
+        $birthday_date_day = $this->getVailLastDay( old("birthday_date.year"), old("birthday_date.month") );
+
+        dump($birthday_date_day);
+
+        return view('admin.member.create',compact('birthday_date_day'));
     }
 
     public function store(MemberFormRequest $request)
@@ -42,6 +47,30 @@ class MembersController extends Controller
         //$request->session()->regenerateToken();
         //return back();
     }
+
+    /**
+     * 年月から有効な最終日を返す
+     * @param  int|string 年
+     * @param  int|string 月
+     * @return int|null   日
+     */
+    private function getVailLastDay($year, $month)
+    {
+        if( !is_numeric($year) && !is_numeric($month) ) {
+            return null;
+        }
+
+        //月の最終日を配列へ
+        $lastday = ['', 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+        //うるう年計算
+        $year = (int)$year;
+        if (($year % 4 == 0 && $year % 100 != 0) || $year % 400 == 0){
+            $lastday[2] = 29; //2月の最終日を29日に
+        }
+        return $lastday[(int)$month];
+    }
+
 
     public function show($id)
     {

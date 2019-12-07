@@ -1,4 +1,8 @@
 @extends('layouts.app')
+@section('head-js')
+    {{--    htmlファザードを利用する場合 : http://recipes.laravel.jp/recipe/254--}}
+    <script src="{{ asset('js/validate-pulldown.js') }}" defer></script>
+@endsection
 @section('content')
 <div class="card">
     <div class="card-header">一般登録テスト用</div>
@@ -11,9 +15,10 @@
                 </ul>
         @endif
 
+
+
         <form enctype="multipart/form-data" method="post" accept-charset="utf-8" action="{{ route('member.store') }}" novalidate> {{-- novalidate でhtml側のバリデーションを無効化--}}
             @csrf
-
             <div class="row">
                 <label class="col-3" for="family_name">名前(姓)* @error('family_name') <br><strong class="text-danger">{{ $message }}</strong> @enderror</label>
                 <input id="family_name" type="text" placeholder="全角15文字以内" name="family_name" value="{{ old('family_name') }}" autocomplete="family-name" maxlength="15">
@@ -30,34 +35,50 @@
 
             <div class="row">
                 <div class="col-3">性別* @error('sex_id') <br><strong class="text-danger">{{ $message }}</strong> @enderror</div>
-                <label class="mr-1"><input id="sex_id" type="radio" name="sex_id" value="1">男</label>
-                <label class="mx-1"><input id="sex_id" type="radio" name="sex_id" value="2">女</label>
+                <label class="mr-1"><input type="radio" name="sex_id" value="1">男</label>
+                <label class="mx-1"><input type="radio" name="sex_id" value="2">女</label>
             </div><hr>
 
-            <div class="row">
+            <div class="row dateChange">
                 <div class="col-3">生年月日* @error('birthday_date.*') <br><strong class="text-danger">{{ $message }}</strong> @enderror</div>
                 <div>
-                    <span>年</span>
-                    <select name="birthday_date[year]">
+                    <select name="birthday_date[year]" class="dateChangeYear" style="width: 5rem;">
                         <option value=""></option>
-                        <option value="2019" selected="selected">2019</option>
-                        <option value="2018">2018</option>
-                        <option value="1900">1900</option>
+                        @for ($i = date('Y'); $i >= (date('Y') - 120) ; $i--)
+                            @if($i == old('birthday_date.year'))
+                            <option value="{{$i}}" selected="selected">{{$i}}</option>
+                            @else
+                            <option value="{{$i}}">{{$i}}</option>
+                            @endif
+                        @endfor
                     </select>
-                    <span class="pl-2">月</span>
-                    <select name="birthday_date[month]">
+                    <span class="px-1">年</span>
+                    <select name="birthday_date[month]" class="dateChangeMonth" style="width:3rem;">
+                         <option value=""></option>
+                     @for ($i = 1; $i <= 12 ; $i++)
+                         @php($zero_padding = substr( ('0' . $i), -2 )) {{-- substrによる0埋め --}}
+                         @if($zero_padding == old('birthday_date.month'))
+                         <option value="{{ $zero_padding }}" selected="selected">{{ $zero_padding }}</option>
+                         @else
+                         <option value="{{ $zero_padding }}">{{ $zero_padding }}</option>
+                         @endif
+                     @endfor
+                    </select>
+                    <span class="px-1">月</span>
+                    <select name="birthday_date[day]" class="dateChangeDay" style="width:3rem;">
                         <option value=""></option>
-                        <option value="01" selected="selected">01</option>
-                        <option value="02">02</option>
-                        <option value="12">12</option>
+                        @if(is_numeric($birthday_date_day))
+                            @for ($i = 1; $i <= $birthday_date_day ; $i++)
+                                @php($zero_padding = sprintf('%02d',$i) ) {{-- sprintfによる0埋め --}}
+                                @if($zero_padding == old('birthday_date.day'))
+                                    <option value="{{ $zero_padding }}" selected="selected">{{ $zero_padding }}</option>
+                                @else
+                                    <option value="{{ $zero_padding }}">{{ $zero_padding }}</option>
+                                @endif
+                            @endfor
+                        @endif
                     </select>
-                    <span class="pl-2">日</span>
-                    <select name="birthday_date[day]">
-                        <option value=""></option>
-                        <option value="01" selected="selected">01</option>
-                        <option value="02">02</option>
-                        <option value="31">31</option>
-                    </select>
+                    <span class="px-1">日</span>
                 </div>
             </div><hr>
 
@@ -75,14 +96,14 @@
                 <div class="col-3">あなたの趣味(任意) @error('hobby') <br><strong class="text-danger">{{ $message }}</strong> @enderror </div>
                 <div class="col-8">
                     {{--                    参考(name属性の配列要素をoldで取得する方法) : https://www.yukiiworks.com/archives/264            --}}
-                    <label class="mx-1"><input type="checkbox" id="hobby" name="hobby[1]" value="1" {{  old('hobby.1') ? 'checked' : '' }}>勉強</label>
-                    <label class="mx-1"><input type="checkbox" id="hobby" name="hobby[2]" value="2" {{  old('hobby.2') ? 'checked' : '' }}>読書</label>
-                    <label class="mx-1"><input type="checkbox" id="hobby" name="hobby[3]" value="3" {{  old('hobby.3') ? 'checked' : '' }}>スポーツ</label>
-                    <label class="mx-1"><input type="checkbox" id="hobby" name="hobby[4]" value="4" {{  old('hobby.4') ? 'checked' : '' }}>アニメ・ゲーム</label>
-                    <label class="mx-1"><input type="checkbox" id="hobby" name="hobby[5]" value="5" {{  old('hobby.5') ? 'checked' : '' }}>映画鑑賞</label>
-                    <label class="mx-1"><input type="checkbox" id="hobby" name="hobby[6]" value="6" {{  old('hobby.6') ? 'checked' : '' }}>旅行</label>
-                    <label class="mx-1"><input type="checkbox" id="hobby" name="hobby[7]" value="7" {{  old('hobby.7') ? 'checked' : '' }}>音楽</label>
-                    <label class="mx-1"><input type="checkbox" id="hobby" name="hobby[8]" value="8" {{  old('hobby.8') ? 'checked' : '' }}>料理</label>
+                    <label class="mx-1"><input type="checkbox" name="hobby[1]" value="1" {{  old('hobby.1') ? 'checked' : '' }}>勉強</label>
+                    <label class="mx-1"><input type="checkbox" name="hobby[2]" value="2" {{  old('hobby.2') ? 'checked' : '' }}>読書</label>
+                    <label class="mx-1"><input type="checkbox" name="hobby[3]" value="3" {{  old('hobby.3') ? 'checked' : '' }}>スポーツ</label>
+                    <label class="mx-1"><input type="checkbox" name="hobby[4]" value="4" {{  old('hobby.4') ? 'checked' : '' }}>アニメ・ゲーム</label>
+                    <label class="mx-1"><input type="checkbox" name="hobby[5]" value="5" {{  old('hobby.5') ? 'checked' : '' }}>映画鑑賞</label>
+                    <label class="mx-1"><input type="checkbox" name="hobby[6]" value="6" {{  old('hobby.6') ? 'checked' : '' }}>旅行</label>
+                    <label class="mx-1"><input type="checkbox" name="hobby[7]" value="7" {{  old('hobby.7') ? 'checked' : '' }}>音楽</label>
+                    <label class="mx-1"><input type="checkbox" name="hobby[8]" value="8" {{  old('hobby.8') ? 'checked' : '' }}>料理</label>
                 </div>
             </div><hr>
 

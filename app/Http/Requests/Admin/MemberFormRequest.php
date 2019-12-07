@@ -47,7 +47,7 @@ class MemberFormRequest extends FormRequest
 
             //全角数字を半角数字へ
             $string_integer = mb_convert_kana($value, 'n', "UTF-8");
-            if(ctype_digit($string_integer)){
+            if(is_numeric($string_integer)){
                 $this->merge([
                     $key => $string_integer,
                 ]);
