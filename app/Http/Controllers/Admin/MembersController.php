@@ -26,9 +26,6 @@ class MembersController extends Controller
         //dump($_POST);
 
         $birthday_date_day = $this->getVailLastDay( old("birthday_date.year"), old("birthday_date.month") );
-
-        dump($birthday_date_day);
-
         return view('admin.member.create',compact('birthday_date_day'));
     }
 
