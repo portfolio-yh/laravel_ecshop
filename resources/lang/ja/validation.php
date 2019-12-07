@@ -35,7 +35,7 @@ return [
     'date_format'          => ':attributeは":format"書式と一致していません。',
     'different'            => ':attributeは:otherと違うものにしてください。',
     'digits'               => ':attributeは:digits桁にしてください',
-    'digits_between'       => ':attributeは:min?:max桁にしてください。',
+    'digits_between'       => ':attributeは:min～:max桁にしてください。',
     'dimensions'           => ':attributeは画像サイズが不正です。',                   // 追加
     'distinct'             => ':attributeは重複しています。',                         // 追加
     'email'                => ':attributeを正しいメールアドレスにしてください。',
