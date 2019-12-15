@@ -15,8 +15,6 @@
                 </ul>
         @endif
 
-
-
         <form enctype="multipart/form-data" method="post" accept-charset="utf-8" action="{{ route('member.store') }}" novalidate> {{-- novalidate でhtml側のバリデーションを無効化--}}
             @csrf
             <div class="row">
@@ -35,8 +33,8 @@
 
             <div class="row">
                 <div class="col-3">性別* @error('sex_id') <br><strong class="text-danger">{{ $message }}</strong> @enderror</div>
-                <label class="mr-1"><input type="radio" name="sex_id" value="1">男</label>
-                <label class="mx-1"><input type="radio" name="sex_id" value="2">女</label>
+                <label class="mr-1"><input type="radio" name="sex_id" value="1" {{old('sex_id') ? 'checked': ''}}>男</label>
+                <label class="mx-1"><input type="radio" name="sex_id" value="2" {{old('sex_id') ? 'checked': ''}}>女</label>
             </div><hr>
 
             <div class="row dateChange">
@@ -128,6 +126,7 @@
             </div><hr>
 
             <button type="submit" class="col-3 mx-auto btn btn-block btn-primary">{{ __('Register') }}</button>
+
 
 
             {{--

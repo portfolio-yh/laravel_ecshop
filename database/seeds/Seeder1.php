@@ -35,38 +35,6 @@ class Seeder1 extends Seeder
             ]);
 
 
-
-//         DB::table('t_admins')->insert(
-//         [
-//             [
-//                 'work_id'      =>  1,
-//                 'authority_id' =>  1,
-//                 'creator_id'   =>  1,
-//                 'name'         =>  'admin001',
-//                 'department'   =>  null,
-//                 'login_id'     =>  'admin001',
-//                 'password'     =>  Hash::make('admin001'),
-//                 'salt'         =>  Hash::make('admin001'),
-//                 'sort_no'      =>  1,
-//                 'created_at'   =>  $now,
-//                 'updated_at'    => $now,
-//             ],
-//             [
-//                 'work_id'      =>  2,
-//                 'authority_id' =>  2,
-//                 'creator_id'   =>  1,
-//                 'name'         =>  'admin002',
-//                 'department'   =>  null,
-//                 'login_id'     =>  'admin002',
-//                 'password'     =>  Hash::make('admin002'),
-//                 'salt'         =>  Hash::make('admin002'),
-//                 'sort_no'      =>  2,
-//                 'created_at'   =>  $now,
-//                 'updated_at'   =>  $now,
-//             ],
-//         ]);
-
-
         DB::table('t_admins')->insert(
             [
                 [
@@ -97,6 +65,34 @@ class Seeder1 extends Seeder
                 ],
 
             ]);
+
+
+        DB::table('t_members')->insert(
+            [
+                [
+                    'name' => 'admin001',
+                    'family_name' => 'admin',
+                    'family_name_kana' => 'アドミン',
+                    'given_name' => '001',
+                    'given_name_kana' => 'ゼロゼロイチ',
+                    'sex_type' => '0',
+                    'address' => '住所12345678910',
+                    'address_postal_code' => '123456',
+                    'address_region' => '〇〇県',
+                    'address_locality' => '〇〇市',
+                    'email' => 'admin001@admin.co.jp',
+                    'tel' => '0011112222',
+                    'tel_area' => '00',
+                    'tel_city' => '1111',
+                    'tel_subscriber' => '2222',
+                    'birthday' => '2019-01-02',
+                    'hobby' => '1',
+                    'updated_by' => 'admin001',
+                    'created_at'   =>  $now,
+                    'updated_at'    => $now,
+                ],
+            ]);
+
 
 
         DB::table('t_categories')->insert(

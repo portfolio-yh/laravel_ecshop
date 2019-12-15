@@ -4,9 +4,14 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Contracts\Validation\Factory as ValidationFactory;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+
+
 
 class MemberFormRequest extends FormRequest
 {
+
+
 
     public function authorize()
     {
@@ -14,23 +19,25 @@ class MemberFormRequest extends FormRequest
     }
 
 
-    //ヴァリデーション前にフォームの入力値を変換
+
+
+    //ヴァリデーション前にフォームの入力値を変換 : allのほうが安全？ https://blog.capilano-fw.com/?p=579
     protected function prepareForValidation()
     {
         //$validator = parent::getValidatorInstance();
 
         //半角カナを全角カナへ
         $this->merge([
-            'family-name_kana' =>  $this->filled('family-name_kana')   ? mb_convert_kana( $this->input("family-name_kana"), 'KV', "UTF-8"  )
-                : null,
-            'given-name_kana' => $this->filled('given-name_kana')  ? mb_convert_kana( $this->input("given-name_kana"), 'KV', "UTF-8" )
-                : null,
+            'family-name_kana' =>  $this->filled('family-name_kana')
+                ? mb_convert_kana( $this->input("family-name_kana"), 'KV', "UTF-8"  ) : null,
+            'given-name_kana' => $this->filled('given-name_kana')
+                ? mb_convert_kana( $this->input("given-name_kana"), 'KV', "UTF-8" ) : null,
         ]);
 
         //電話番号にハイフンがある場合削除
         $this->merge([
-            'tel' =>  $this->filled('tel') ? preg_replace('/[^0-9]/u','', $this->input('tel'))
-                : null,
+            'tel' =>  $this->filled('tel')
+                ? preg_replace('/[^0-9]/u','', $this->input('tel')) : null,
         ]);
 
 
@@ -47,13 +54,16 @@ class MemberFormRequest extends FormRequest
 
             //全角数字を半角数字へ
             $string_integer = mb_convert_kana($value, 'n', "UTF-8");
-            if(is_numeric($string_integer)){
+            if(ctype_digit($string_integer)){
                 $this->merge([
                     $key => $string_integer,
                 ]);
             }
         }
     }
+
+
+
 
 
     public function attributes()
@@ -74,17 +84,24 @@ class MemberFormRequest extends FormRequest
 
     public function rules()
     {
+
+//        //バリデーションルール拡張例 : https://www.larajapan.com/2016/07/19/%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%A0%E3%83%90%E3%83%AA%E3%83%87%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3-1-validator%E3%83%95%E3%82%A1%E3%82%B5%E3%83%BC%E3%83%89%E3%81%AEextend/
+//        Validator::extend('kana', function($attribute, $value, $parameters, $validator) {
+//            // 半角空白、全角空白、全角記号、全角かなを許可
+//            return preg_match("/^[ぁ-んー 　！-＠［-｀｛-～]+$/u", $value);
+//        });
+
         return [
-            '*_name'          => ['required', 'string', 'regex:/^[^\x01-\x7E\x{FF61}-\x{FF9F}]+$/u', 'max:5'],
-            '*_name_kana'     => ['required', 'string', 'regex:/^[\p{Katakana}]+$/u', 'max:5'],
-            'sex_id'          => ['bail','required','integer'],                                  //ラジオボタン
-            'birthday_date.*' => ['bail', 'required'],                                           //ワイルドカード使用(配列)
-            'age'             => ['bail','required','integer','digits_between:1,3'],
+            '*_name'          => ['nullable', 'string', 'regex:/^[^\x01-\x7E\x{FF61}-\x{FF9F}]+$/u', 'max:5'],
+            '*_name_kana'     => ['nullable', 'string', 'regex:/^[\p{Katakana}]+$/u', 'max:5'],
+            'sex_id'          => ['nullable','integer'],                                  //ラジオボタン
+            'birthday_date.*' => ['nullable', ],                                           //ワイルドカード使用(配列)
+            'age'             => ['nullable','integer','digits_between:1,3'],
             'hobby'           => ['nullable','array','distinct'],                                //チェックボックス(配列)
-            'tel'             => ['bail','required','regex:/^(0{1}\d{9,10})$/u'],                //電話番号ハイフンなし
-            'email'           => ['required', 'string', 'email', 'max:255', 'unique:t_members'],
-            'password'        => ['required', 'string', 'min:8', 'same:password2'],              //same:フィールド名(指定したフィールドと同じ値であるかどうか)
-            'agreement'       => ['required'],
+            'tel'             => ['nullable','regex:/^(0{1}\d{9,10})$/u'],                //電話番号ハイフンなし
+            'email'           => ['nullable', 'string', 'email', 'max:255', 'unique:t_members'],
+            'password'        => ['nullable', 'string', 'min:8', 'same:password2'],              //same:フィールド名(指定したフィールドと同じ値であるかどうか)
+            'agreement'       => ['nullable'],
 
 
             //バリデーション参考(same,comfimedなどの指定系) : https://qiita.com/fagai/items/9904409d3703ef6f79a2
@@ -107,6 +124,9 @@ class MemberFormRequest extends FormRequest
         ];
     }
 
+
+
+
     public function messages()
     {
         return[
@@ -122,26 +142,51 @@ class MemberFormRequest extends FormRequest
     }
 
     //フォームリクエストへのAfterフックを追加
-    public function withValidator(\Illuminate\Contracts\Validation\Validator $validator)
+    public function withValidator(Validator $validator)
     {
+
+        //dd($validator);
+
+        //methot取得(GET,PUT,POST)
+        //$this->method()
+
+        //ルート名取得
+        if(\Route::currentRouteName() == "member.store"){
+
+        }
+
+        //エラーがある場合return
+        if($validator->fails()) return;
+
+
+
+//        //追加ルール
+//        $validator->sometimes('agreement','test',function ($data){
+//            return 0;
+//        });
+
+        //追加ルール実行
         $validator->after(function ($validator) {
 
-            //エラーがなかった場合はチェック
-            if(!$validator->errors()->has('birthday_date.*')){
-                //生年月日が存在する日付か確認
-                $arr = $this->input('birthday_date');
-                if(!checkdate($arr['day'],$arr['month'],$arr['year']) ){
-                    $validator->errors()->add('birthday_date.*', '選択された生年月日は存在しません。');
-                }
-            }
+//            //生年月日が有効な日付か確認
+//            $arr = $this->input('birthday_date');
+//            if(!checkdate($arr['day'],$arr['month'],$arr['year']) ){
+//                $validator->errors()->add('birthday_date.*', '選択された生年月日は存在しません。');
+//            }
+
+//            //カスタムメソッド呼び出し
+//            if(! $this->customTest()){
+//                $validator->errors()->add('birthday_date', 'カスタムエラーテスト');
+//            }
+
+
+
         });
     }
 
-
-    //独自メソッド
-    public function test(){
-        $test = $this->all();
-        return $test;
+    //カスタムメソッド
+    public function customTest(){
+        return false;
     }
 
 //    //csvを返す
