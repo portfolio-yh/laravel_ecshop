@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Admin\product;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\CategoryFormRequest;
-use App\TCategories;
+//use App\Http\Requests\Admin\CategoryFormRequest;
+use App\Categories;
 use PhpParser\Node\Stmt\Do_;
 
 class CategoryController extends Controller
@@ -13,13 +13,12 @@ class CategoryController extends Controller
 
     /**
      * カテゴリ一覧トップ画面
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(Request $request)
     {
-
         return view('admin.product.category_top',[
-            'categories' => TCategories::treeStructure(),
+            'categories' => Categories::treeStructure(),
             'breadcrumbs' => [['title'  =>  'カテゴリ一覧','url' => action('Admin\product\CategoryController@index')]]
         ]);
     }
@@ -35,35 +34,33 @@ class CategoryController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(CategoryFormRequest $request)
+    public function store(Request $request)
     {
-        //dump($request->all());
-
-
         return back();
-
-
-
-
-
-
     }
 
     /**
      * カテゴリ詳細一覧
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+
+
+
+    /**
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function show($id)
     {
-        $find_categories = TCategories::find($id, ['id','parent_category_id','category_name']);
+        $find_categories = new Categories();
+
+        $find_categories = Categories::find($id, ['id','parent_category_id','category_name']);
         $child_categories = $find_categories->children()->get(['id','parent_category_id','category_name']);
-        $breadcrumbs = TCategories::breadCrumbs($id);
+        $breadcrumbs = Categories::breadCrumbs($id);
         return view('Admin.product.category_show', compact('find_categories', 'child_categories', 'breadcrumbs'));
     }
 
@@ -113,22 +110,22 @@ class CategoryController extends Controller
 
 
 
-//dd( TCategories::with('children')->get() );
+//dd( Categories::with('children')->get() );
 
-//         dump( //dump(TCategories::all()),
-//             //dump(TCategories::get()->toJson()),
-//             //TCategories::get()->toArray(),
-//             //TCategories::with('children')->get()
+//         dump( //dump(Categories::all()),
+//             //dump(Categories::get()->toJson()),
+//             //Categories::get()->toArray(),
+//             //Categories::with('children')->get()
 
 //         );
 
-//$surveys = TCategories::with('childrenRecursive')->whereNull('parent_category_id')->get();
+//$surveys = Categories::with('childrenRecursive')->whereNull('parent_category_id')->get();
 
-//var_dump( TCategories::with('childrenRecursive')->whereNull('parent_category_id')->get() );
+//var_dump( Categories::with('childrenRecursive')->whereNull('parent_category_id')->get() );
 
-//$data = TCategories::where('parent_category_id',1);
+//$data = Categories::where('parent_category_id',1);
 
-//         $data = TCategories::find(7);
+//         $data = Categories::find(7);
 
 
 
@@ -144,16 +141,16 @@ class CategoryController extends Controller
 
 
 
-//$data = TCategories::find(1);
+//$data = Categories::find(1);
 
 
 
 //$data->with('childrenRecursive')->get()->puluck('id');
 
 //木構造
-//dump( TCategories::with('childrenRecursive')->whereNull('parent_category_id')->get() );
+//dump( Categories::with('childrenRecursive')->whereNull('parent_category_id')->get() );
 
-//$data = TCategories::with('childrenRecursive')->whereNull('parent_category_id')->get();
+//$data = Categories::with('childrenRecursive')->whereNull('parent_category_id')->get();
 
 //         $results = [];
 //         $count = 0;
@@ -185,7 +182,7 @@ class CategoryController extends Controller
 
 
 
-//         $data = TCategories::with('childrenRecursive')->whereNull('parent_category_id')->get();
+//         $data = Categories::with('childrenRecursive')->whereNull('parent_category_id')->get();
 
 //         //$data->pluck("id");
 
@@ -220,7 +217,7 @@ class CategoryController extends Controller
 
 
 
-//$data = TCategories::where()->category_name;
+//$data = Categories::where()->category_name;
 
 //         foreach ($comments as $comment) {
 //             //
@@ -241,39 +238,39 @@ class CategoryController extends Controller
 
 
 
-//dump( $categories = TCategories::with('parent')->whereNull('parent_category_id')->get() );
+//dump( $categories = Categories::with('parent')->whereNull('parent_category_id')->get() );
 
 
-//dump($find_categories = TCategories::find($id)->parent );
+//dump($find_categories = Categories::find($id)->parent );
 
 
-//$find_categories = TCategories::find(7);
+//$find_categories = Categories::find(7);
 
 //dump( $find_categories->with('parent')->whereBetween('parent_category_id', [1, 100])->get() );
 
 
 //$parent_array = [];
-//TCategories::parentRecursive(7, $parent_array);
+//Categories::parentRecursive(7, $parent_array);
 
 //dump($parent_array);
 
 
 
 //           $arr = [];
-//           $find = TCategories::find($id);
+//           $find = Categories::find($id);
 //           do {
 //               $arr[] = $find->toArray();
-//               $find = TCategories::find($find->parent_category_id);
+//               $find = Categories::find($find->parent_category_id);
 //           } while (isset($find->parent_category_id));
 
 
 
 
 //          $collection = collect();
-//           $find = TCategories::find($id);
+//           $find = Categories::find($id);
 //           do {
 //               $collection->push($find->toArray());
-//               $find = TCategories::find($find->parent_category_id);
+//               $find = Categories::find($find->parent_category_id);
 //           } while (isset($find->parent_category_id));
 
 
@@ -287,7 +284,7 @@ class CategoryController extends Controller
 //                   echo '1';
 //                   $arr += $find->toArray();
 //                   //$arr += $find->parent->toArray();
-//                   $find = TCategories::find($find->parent_category_id);
+//                   $find = Categories::find($find->parent_category_id);
 //               }
 //               break;
 //           }

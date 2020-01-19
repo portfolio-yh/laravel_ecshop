@@ -21,12 +21,12 @@ class Categories extends Model
     // parent
     public function parent()
     {
-        return $this->belongsTo(TCategories::class,'parent_category_id', 'id');
+        return $this->belongsTo(Categories::class,'parent_category_id', 'id');
     }
 
     public function children()
     {
-        return $this->hasMany(TCategories::class, 'parent_category_id', 'id');
+        return $this->hasMany(Categories::class, 'parent_category_id', 'id');
     }
 
     // all ascendants
@@ -45,7 +45,7 @@ class Categories extends Model
 
     /**
      * 木構造化
-     * @return Collection
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
      */
     public static function treeStructure() {
         return self::with('childrenRecursive')->whereNull('parent_category_id')->get();
