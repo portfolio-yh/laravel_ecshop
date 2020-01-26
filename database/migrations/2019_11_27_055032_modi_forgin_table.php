@@ -18,10 +18,10 @@ class ModiForginTable extends Migration
 
 
         //制約の設定
-        Schema::table('t_product_categories', function (Blueprint $table) {
-            $table->foreign('product_id')->references('id')->on('t_products');
-            $table->foreign('category_id')->references('id')->on('t_categories');
-        });
+//        Schema::table('t_product_categories', function (Blueprint $table) {
+//            $table->foreign('product_id')->references('id')->on('t_products');
+//            $table->foreign('category_id')->references('id')->on('t_categories');
+//        });
 
         Schema::table('t_products', function (Blueprint $table) {
             $table->foreign('creator_id')->references('id')->on('t_admins');

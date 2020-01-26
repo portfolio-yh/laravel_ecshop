@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class CreateCategoriesTable extends Migration
@@ -31,7 +32,12 @@ class CreateCategoriesTable extends Migration
             //$table->unique('parent_category_id', 'hierarchy');
             $table->foreign('parent_category_id')->references('id')->on('t_categories');
         });
-        DB::statement("ALTER TABLE t_categories COMMENT 'カテゴリ情報'");
+        try {
+            DB::raw("ALTER TABLE t_categories COMMENT '管理者権限マスタ'"); //mySQLの場合
+        } catch (Exception $e) {
+            DB::raw("COMMENT ON TABLE t_categories IS '管理者権限マスタ'");//postgreSQLの場合
+        }
+
     }
 
     /**

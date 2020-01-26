@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class CreateProductsTable extends Migration
@@ -30,7 +31,13 @@ class CreateProductsTable extends Migration
             //$table->foreign('creator_id')->references('id')->on('t_members');
             //$table->foreign('product_status_id')->references('id')->on('m_product_statuses');
         });
-        DB::statement("ALTER TABLE t_products COMMENT '商品情報'");
+        try {
+            DB::raw("ALTER TABLE t_products COMMENT '管理者権限マスタ'"); //mySQLの場合
+        } catch (Exception $e) {
+            DB::raw("COMMENT ON TABLE t_products IS '管理者権限マスタ'");//postgreSQLの場合
+        }
+
+
     }
 
     /**

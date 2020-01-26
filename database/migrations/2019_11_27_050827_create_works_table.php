@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class CreateWorksTable extends Migration
@@ -20,7 +21,12 @@ class CreateWorksTable extends Migration
             //$table->collation = 'utf8';
 
         });
-        DB::statement("ALTER TABLE m_works COMMENT '管理者稼働状況マスタ'");
+        try {
+            DB::raw("ALTER TABLE m_works COMMENT '管理者権限マスタ'"); //mySQLの場合
+        } catch (Exception $e) {
+            DB::raw("COMMENT ON TABLE m_works IS '管理者権限マスタ'");//postgreSQLの場合
+        }
+
     }
 
     /**
