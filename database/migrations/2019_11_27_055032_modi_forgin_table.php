@@ -45,10 +45,10 @@ class ModiForginTable extends Migration
     public function down()
     {
 
-        Schema::table('t_product_categories', function (Blueprint $table) {
-            $table->dropForeign('t_product_categories_product_id_foreign');
-            $table->dropForeign('t_product_categories_category_id_foreign');
-        });
+//        Schema::table('t_product_categories', function (Blueprint $table) {
+//            $table->dropForeign('t_product_categories_product_id_foreign');
+//            $table->dropForeign('t_product_categories_category_id_foreign');
+//        });
 
         Schema::table('t_products', function (Blueprint $table) {
             $table->dropForeign('t_products_creator_id_foreign');

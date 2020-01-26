@@ -41,11 +41,16 @@ class CreateMembersTable extends Migration
 //            $table->foreign('creator_id')->references('id')->on('t_members');
 //            $table->foreign('authority_id')->references('id')->on('m_authorities');
         });
-        try {
-            DB::raw("ALTER TABLE t_members COMMENT '管理者権限マスタ'"); //mySQLの場合
-        } catch (Exception $e) {
-            DB::raw("COMMENT ON TABLE t_members IS '管理者権限マスタ'");//postgreSQLの場合
+        switch (env('DB_CONNECTION')) {
+            case 'mysql':
+                DB::statement("ALTER TABLE t_members COMMENT 'メンバー情報'"); //mySQLの場合
+                break;
+            case 'pgsql':
+                DB::statement("COMMENT ON TABLE t_members IS 'メンバー情報'");//postgreSQLの場合
+                break;
         }
+
+
 
     }
 

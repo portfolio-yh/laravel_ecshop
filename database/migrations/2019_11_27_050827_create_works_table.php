@@ -21,10 +21,14 @@ class CreateWorksTable extends Migration
             //$table->collation = 'utf8';
 
         });
-        try {
-            DB::raw("ALTER TABLE m_works COMMENT '管理者権限マスタ'"); //mySQLの場合
-        } catch (Exception $e) {
-            DB::raw("COMMENT ON TABLE m_works IS '管理者権限マスタ'");//postgreSQLの場合
+
+        switch (env('DB_CONNECTION')) {
+            case 'mysql':
+                DB::statement("ALTER TABLE m_works COMMENT '管理者稼働状況マスタ'"); //mySQLの場合
+                break;
+            case 'pgsql':
+                DB::statement("COMMENT ON TABLE m_works IS '管理者稼働状況マスタ'");//postgreSQLの場合
+                break;
         }
 
     }

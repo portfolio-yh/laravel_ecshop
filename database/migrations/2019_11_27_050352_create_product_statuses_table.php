@@ -20,15 +20,14 @@ class CreateProductStatusesTable extends Migration
             $table->string('name', 255)->comment('名称');
             $table->unsignedSmallInteger('sort_no')->comment('並び順');
         });
-
-        try {
-            DB::raw("ALTER TABLE m_product_statuses COMMENT '商品状態マスタ'");
-            //DB::statement("ALTER TABLE m_product_statuses COMMENT '商品状態マスタ'");
-        } catch (Exception  $e) {
-            DB::raw("COMMENT ON TABLE m_product_statuses IS '商品状態マスタ'");
-            //DB::statement("COMMENT ON TABLE m_product_statuses IS '商品状態マスタ'");
+        switch (env('DB_CONNECTION')) {
+            case 'mysql':
+                DB::statement("ALTER TABLE m_product_statuses COMMENT '商品情報マスタ'"); //mySQLの場合
+                break;
+            case 'pgsql':
+                DB::statement("COMMENT ON TABLE m_product_statuses IS '商品情報マスタ'");//postgreSQLの場合
+                break;
         }
-
 
     }
 

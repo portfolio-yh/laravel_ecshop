@@ -32,10 +32,14 @@ class CreateCategoriesTable extends Migration
             //$table->unique('parent_category_id', 'hierarchy');
             $table->foreign('parent_category_id')->references('id')->on('t_categories');
         });
-        try {
-            DB::raw("ALTER TABLE t_categories COMMENT '管理者権限マスタ'"); //mySQLの場合
-        } catch (Exception $e) {
-            DB::raw("COMMENT ON TABLE t_categories IS '管理者権限マスタ'");//postgreSQLの場合
+
+        switch (env('DB_CONNECTION')) {
+            case 'mysql':
+                DB::statement("ALTER TABLE t_categories COMMENT 'カテゴリ情報'"); //mySQLの場合
+                break;
+            case 'pgsql':
+                DB::statement("COMMENT ON TABLE t_categories IS 'カテゴリ情報'");//postgreSQLの場合
+                break;
         }
 
     }

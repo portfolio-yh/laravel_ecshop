@@ -31,10 +31,13 @@ class CreateProductsTable extends Migration
             //$table->foreign('creator_id')->references('id')->on('t_members');
             //$table->foreign('product_status_id')->references('id')->on('m_product_statuses');
         });
-        try {
-            DB::raw("ALTER TABLE t_products COMMENT '管理者権限マスタ'"); //mySQLの場合
-        } catch (Exception $e) {
-            DB::raw("COMMENT ON TABLE t_products IS '管理者権限マスタ'");//postgreSQLの場合
+        switch (env('DB_CONNECTION')) {
+            case 'mysql':
+                DB::statement("ALTER TABLE t_products COMMENT '商品情報'"); //mySQLの場合
+                break;
+            case 'pgsql':
+                DB::statement("COMMENT ON TABLE t_products IS '商品情報'");//postgreSQLの場合
+                break;
         }
 
 
