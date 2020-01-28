@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class CreateMembersTable extends Migration
@@ -40,7 +41,17 @@ class CreateMembersTable extends Migration
 //            $table->foreign('creator_id')->references('id')->on('t_members');
 //            $table->foreign('authority_id')->references('id')->on('m_authorities');
         });
-        DB::statement("ALTER TABLE t_members COMMENT 'メンバー情報'");
+        switch (env('DB_CONNECTION')) {
+            case 'mysql':
+                DB::statement("ALTER TABLE t_members COMMENT 'メンバー情報'"); //mySQLの場合
+                break;
+            case 'pgsql':
+                DB::statement("COMMENT ON TABLE t_members IS 'メンバー情報'");//postgreSQLの場合
+                break;
+        }
+
+
+
     }
 
     /**

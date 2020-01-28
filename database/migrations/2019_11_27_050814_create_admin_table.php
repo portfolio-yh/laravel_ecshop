@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class CreateAdminTable extends Migration
@@ -34,7 +35,14 @@ class CreateAdminTable extends Migration
             //$table->foreign('authority_id')->references('id')->on('m_authorities');
 
         });
-        DB::statement("ALTER TABLE t_admins COMMENT '管理者情報'");
+        switch (env('DB_CONNECTION')) {
+            case 'mysql':
+                DB::statement("ALTER TABLE t_admins COMMENT '管理者情報'"); //mySQLの場合
+                break;
+            case 'pgsql':
+                DB::statement("COMMENT ON TABLE t_admins IS '管理者情報'");//postgreSQLの場合
+                break;
+        }
 
     }
 

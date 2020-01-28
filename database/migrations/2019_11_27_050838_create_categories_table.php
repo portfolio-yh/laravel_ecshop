@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class CreateCategoriesTable extends Migration
@@ -31,7 +32,16 @@ class CreateCategoriesTable extends Migration
             //$table->unique('parent_category_id', 'hierarchy');
             $table->foreign('parent_category_id')->references('id')->on('t_categories');
         });
-        DB::statement("ALTER TABLE t_categories COMMENT 'カテゴリ情報'");
+
+        switch (env('DB_CONNECTION')) {
+            case 'mysql':
+                DB::statement("ALTER TABLE t_categories COMMENT 'カテゴリ情報'"); //mySQLの場合
+                break;
+            case 'pgsql':
+                DB::statement("COMMENT ON TABLE t_categories IS 'カテゴリ情報'");//postgreSQLの場合
+                break;
+        }
+
     }
 
     /**

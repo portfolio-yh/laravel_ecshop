@@ -18,10 +18,10 @@ class ModiForginTable extends Migration
 
 
         //制約の設定
-        Schema::table('t_product_categories', function (Blueprint $table) {
-            $table->foreign('product_id')->references('id')->on('t_products');
-            $table->foreign('category_id')->references('id')->on('t_categories');
-        });
+//        Schema::table('t_product_categories', function (Blueprint $table) {
+//            $table->foreign('product_id')->references('id')->on('t_products');
+//            $table->foreign('category_id')->references('id')->on('t_categories');
+//        });
 
         Schema::table('t_products', function (Blueprint $table) {
             $table->foreign('creator_id')->references('id')->on('t_admins');
@@ -45,10 +45,10 @@ class ModiForginTable extends Migration
     public function down()
     {
 
-        Schema::table('t_product_categories', function (Blueprint $table) {
-            $table->dropForeign('t_product_categories_product_id_foreign');
-            $table->dropForeign('t_product_categories_category_id_foreign');
-        });
+//        Schema::table('t_product_categories', function (Blueprint $table) {
+//            $table->dropForeign('t_product_categories_product_id_foreign');
+//            $table->dropForeign('t_product_categories_category_id_foreign');
+//        });
 
         Schema::table('t_products', function (Blueprint $table) {
             $table->dropForeign('t_products_creator_id_foreign');

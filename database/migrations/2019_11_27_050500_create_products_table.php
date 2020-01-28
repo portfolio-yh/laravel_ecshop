@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class CreateProductsTable extends Migration
@@ -30,7 +31,16 @@ class CreateProductsTable extends Migration
             //$table->foreign('creator_id')->references('id')->on('t_members');
             //$table->foreign('product_status_id')->references('id')->on('m_product_statuses');
         });
-        DB::statement("ALTER TABLE t_products COMMENT '商品情報'");
+        switch (env('DB_CONNECTION')) {
+            case 'mysql':
+                DB::statement("ALTER TABLE t_products COMMENT '商品情報'"); //mySQLの場合
+                break;
+            case 'pgsql':
+                DB::statement("COMMENT ON TABLE t_products IS '商品情報'");//postgreSQLの場合
+                break;
+        }
+
+
     }
 
     /**
