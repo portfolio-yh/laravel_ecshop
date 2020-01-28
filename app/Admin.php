@@ -57,5 +57,6 @@ class Admin extends Authenticatable //継承は「Authenticatable」
     protected $hidden = [
         'password', 'remember_token',
     ];
+    //
 
 }
