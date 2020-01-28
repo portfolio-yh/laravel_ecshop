@@ -6,19 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Categories extends Model
 {
-    //category情報
     protected $table = 't_categories';
-    //protected $relations = 't_categories';
 
     protected $fillable = ['parent_category_id', 'creator_id', 'category_name', 'hierarchy', 'sort_no'];
 
-    //, 'delete_flag', 'created_at', 'updated_at'
-
     protected $guarded = ['id'];
 
-
-
-    // parent
     public function parent()
     {
         return $this->belongsTo(Categories::class,'parent_category_id', 'id');
@@ -51,31 +44,14 @@ class Categories extends Model
         return self::with('childrenRecursive')->whereNull('parent_category_id')->get();
     }
 
-
-
     /**
-     * 現在のIDからルートまでのデータをパンくずリストにして返す
-     * @return Array
+     * ルートカテゴリを返す
+     * @return array
      */
-    public static function breadCrumbs($cullent_id) {
-        $collection = collect();
-        $find = self::find($cullent_id, ['id','parent_category_id','category_name']);
-        while ($find) {
-            $arr = ['title' => $find->category_name,'url' => action('Admin\product\CategoryController@show', ['category' => $find->id])];
-            $collection->push($arr);
-            $find = self::find($find->parent_category_id, ['id','parent_category_id','category_name']);
-        }
-        $arr = ['title'  =>  'カテゴリ一覧', 'url' => action('Admin\product\CategoryController@index')];
-        $collection->push($arr);
-        return $collection->reverse('key')->all();
+    public static function getRootCategories(){
+        return \DB::select("select id, category_name from t_categories where parent_category_id IS NULL");
+        //return self::whereNull('parent_category_id')->select('id', 'category_name')->get();
     }
 
-    /**
-     * 親IDがないルートデータのみ返す
-     * @return Array
-     */
-    public static function rootsOnly(){
-        return self::whereNull('parent_category_id')->get()->toArray();
-    }
 
 }

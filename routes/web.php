@@ -31,7 +31,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'auth
     Route::post('logout', 'Auth\LoginController@logout')->name('admin.logout');
 
     Route::resource('member', 'MembersController');
-
+    Route::resource('category', 'CategoryController');
 
 });
 
