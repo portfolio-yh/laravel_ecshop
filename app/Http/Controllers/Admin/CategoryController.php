@@ -35,11 +35,11 @@ class CategoryController extends Controller
      * @param $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function show(Request $request, $id)
+    public function show($id)
     {
-        $current_categories = Categories::find($id, ['id','parent_category_id','category_name','sort_no','hierarchy']);
-        $child_categories = $current_categories->children()->get(['id','parent_category_id','category_name','sort_no','hierarchy']);
-        return view('admin.category.show', compact('current_categories', 'child_categories'));
+        $current_category = Categories::find($id, ['id','parent_category_id','category_name','sort_no','hierarchy']);
+        $child_categories = $current_category->children()->orderBy('sort_no')->get(['id','parent_category_id','category_name','sort_no','hierarchy']);
+        return view('admin.category.show', compact('current_category', 'child_categories'));
     }
 
     /**
@@ -154,6 +154,10 @@ class CategoryController extends Controller
 
         $sort_no = $request->query('sort_no');
         $hierarchy = $request->query('hierarchy');
+
+        //dd($sort_no,$hierarchy);
+
+
         try {
             $dbh = \DB::connection()->getPdo();
             $stmt = $dbh->prepare("
@@ -178,8 +182,6 @@ class CategoryController extends Controller
 
         return back();
     }
-
-
 
     /**
      *
