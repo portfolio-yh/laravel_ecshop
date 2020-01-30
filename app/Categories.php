@@ -12,6 +12,7 @@ class Categories extends Model
 
     protected $guarded = ['id'];
 
+    // parent
     public function parent()
     {
         return $this->belongsTo(Categories::class,'parent_category_id', 'id');
@@ -49,7 +50,7 @@ class Categories extends Model
      * @return array
      */
     public static function getRootCategories(){
-        return \DB::select("select id, category_name from t_categories where parent_category_id IS NULL");
+        return \DB::select("select id, category_name, sort_no, hierarchy from t_categories where parent_category_id IS NULL order by sort_no asc");
         //return self::whereNull('parent_category_id')->select('id', 'category_name')->get();
     }
 

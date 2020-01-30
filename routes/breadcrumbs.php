@@ -36,7 +36,16 @@ Breadcrumbs::for('category.show', function ($trail) {
     foreach (array_reverse($reversed_array) as $item) {
         $trail->push($item['name'], $item['url']);
     }
+
+
+
 });
 
+Breadcrumbs::for('admin.login', function ($trail) {
+    $trail->push('Title Here', route('admin.login'));
+});
 
+Breadcrumbs::for('login', function ($trail) {
+    $trail->push('Title Here', route('login'));
+});
 

@@ -32,6 +32,9 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'auth
 
     Route::resource('member', 'MembersController');
     Route::resource('category', 'CategoryController');
+    Route::get('category_sortUp', 'CategoryController@sortUp')->name('category.sortUp');
+    Route::get('category_sortDown', 'CategoryController@sortDown')->name('category.sortDown');
+
 
 });
 

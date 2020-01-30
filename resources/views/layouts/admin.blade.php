@@ -72,7 +72,7 @@
             </div>
         </div>
     </nav>
-    @includeif('breadcrumbs', ['breadcrumbs' => Breadcrumbs::generate(Route::currentRouteName())])
+{{--    @includeif('breadcrumbs', ['breadcrumbs' => Breadcrumbs::generate(Route::currentRouteName())])--}}
     <div class="row">
 
         <!-- left Sidevar -->
@@ -83,6 +83,13 @@
         <!-- main contents -->
 
         <div class="col-md-9 py-4">
+            @if($errors->any())
+                <ul class="alert alert-danger" role="alert">
+                    @foreach ($errors->unique() as $error)
+                        <li class="ml-4">{{ $error }}</li>
+                    @endforeach
+                </ul>
+            @endif
             @yield('content')
         </div>
 
