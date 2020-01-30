@@ -49,3 +49,6 @@ Breadcrumbs::for('login', function ($trail) {
     $trail->push('Title Here', route('login'));
 });
 
+Breadcrumbs::for('category.destroy', function ($trail) {
+    $trail->push('Title Here', route('category.destroy'));
+});

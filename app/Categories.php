@@ -4,6 +4,35 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Categories
+ *
+ * @property int $id カテゴリID
+ * @property int|null $parent_category_id 親カテゴリID
+ * @property int|null $creator_id 作成者ID
+ * @property string $category_name カテゴリ名
+ * @property int|null $hierarchy 階層
+ * @property int $sort_no 並び順
+ * @property int|null $delete_flag
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Categories[] $children
+ * @property-read int|null $children_count
+ * @property-read \App\Categories|null $parent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Categories newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Categories newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Categories query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Categories whereCategoryName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Categories whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Categories whereCreatorId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Categories whereDeleteFlag($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Categories whereHierarchy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Categories whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Categories whereParentCategoryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Categories whereSortNo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Categories whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class Categories extends Model
 {
     protected $table = 't_categories';
